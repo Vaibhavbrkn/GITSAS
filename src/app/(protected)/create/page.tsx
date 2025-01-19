@@ -33,7 +33,6 @@ const CreatePage = ()=>{
                 toast.error(error.message)
             }
         })
-        window.alert(JSON.stringify(data))
         return true
     }
     return (
