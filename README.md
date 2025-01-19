@@ -41,7 +41,7 @@ FIREBASE_MESSAGING_SENDER_ID=
 FIREBASE_APP_ID=
 FIREBASE_MESUREMENT_ID=
 ```
-## Demom
+## Demo
 
 
 https://github.com/user-attachments/assets/5be4cfc3-a7ba-4d3f-90fd-19f82accb290
