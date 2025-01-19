@@ -9,7 +9,7 @@ import { error } from "console";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC_tHsGSd_-7ZWr10FBO9lk7SYLILC_qCc",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "gitsas-144c9.firebaseapp.com",
   projectId: "gitsas-144c9",
   storageBucket: "gitsas-144c9.firebasestorage.app",
