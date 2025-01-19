@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    extensions = [vector]
+}
+
+model user {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    imageUrl String?
+    firstName String?
+    lastName String?
+
+    emailAddress String @unique 
+    credits Int @default(150)
+
+    UserToProject UserToProject[]
+
+    QuestionsAsked Question[]
+}
+
+model Project {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name String
+    githubUrl String
+
+    deletedAt DateTime?
+    
+
+
+    UserToProject UserToProject[]
+
+    commits Commit[]
+
+    SourceCodeEmbedding SourceCodeEmbedding[]
+
+    SavedQuestion Question[]
+
+
+    Meeting Meeting[]
+}
+
+model UserToProject {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user user @relation(fields: [userId], references: [id])
+    userId String
+
+    project Project @relation(fields: [projectId], references: [id])
+    projectId String
+
+    @@unique([userId, projectId])
+}
+
+model SourceCodeEmbedding{
+    id String @id @default(cuid())
+
+    summaryEmbedding Unsupported("vector(768)")?
+    sourceCode String
+    fileName String
+    summary String
+
+    projectId String
+    project Project @relation(fields: [projectId], references: [id])    
+}
+
+model Question{
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    question String 
+    answer String 
+
+    filesReferences Json?
+    project Project @relation(fields: [projectId], references: [id])
+    projectId String
+
+    user user @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model Meeting {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    meetingUrl String
+    status MeetingStatus @default(PROCESSING)
+    name String 
+
+
+    project Project @relation(fields: [projectId], references: [id])
+    projectId String
+
+
+
+    Issue Issue[]
+}
+
+model Issue {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    start String 
+    end String 
+    gist String 
+    headline String 
+    summary String 
+
+    meetingId String 
+    meeting Meeting @relation(fields:  [meetingId], references: [id])
+
+}
+
+enum MeetingStatus{
+    PROCESSING
+    COMPLETED
+}
+
+
+
+model Commit {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+
+    project Project @relation(fields: [projectId], references: [id])
+    projectId String
+    commitHash String
+    commitMessage String
+    commitAuthorName String 
+    commitAuthorAvatar String
+    commitDate DateTime
+
+    summary String
+}
